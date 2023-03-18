@@ -34,7 +34,7 @@ class ProjectsController extends Controller
         //OR ($attributes + ['owner_id' => auth()->id()]);
         $project = Project::create($attributes);
 
-        event(new \App\Events\ProjectCreated($project));
+        //event(new \App\Events\ProjectCreated($project));
 
         //for admin?
         /*\Mail::to('emmanuel.septier@hotmail.com')->send(
