@@ -21,7 +21,7 @@
             </div>
 
             <div class="form-group">
-                <textarea  name="description" class="form-control {{ $errors->has('description') ? 'border border-danger' : ''}}" placeholder="Project description" required>{{ old('description') }}</textarea>
+                <textarea  name="description" class="form-control {{ $errors->has('description') ? 'border border-danger' : ''}}" placeholder="Project description" >{{ old('description') }}</textarea>
 
             </div>
 
