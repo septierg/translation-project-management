@@ -220,8 +220,17 @@
         </nav>
     </div><!-- End Page Title -->
 
+    @if(session('message'))
+        <div class="form-group alert alert-success">
+            <p>{{ session('message')  }}</p>
+        </div>
+    @endif
 
     @yield('content')
+
+
+
+
 
 </main><!-- End #main -->
 

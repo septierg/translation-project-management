@@ -40,6 +40,7 @@ class ProjectsController extends Controller
         /*\Mail::to('emmanuel.septier@hotmail.com')->send(
             new ProjectCreated($project)
         );*/
+        session()->flash('message', 'Your project has been created.');
         return redirect('/projects');
     }
 
