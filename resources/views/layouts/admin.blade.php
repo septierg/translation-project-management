@@ -249,7 +249,7 @@
 </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
+<script src="{{ mix('js/app.js') }}"></script>
 <!-- Vendor JS Files -->
 <script src="{{ asset('admin_assets/vendor/bootstrap/js/bootstrap.bundle.js') }}"></script>
 <script src="{{ asset('admin_assets/vendor/php-email-form/validate.js') }}"></script>
