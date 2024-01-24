@@ -16,7 +16,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'role_id'
     ];
 
     /**
@@ -37,8 +40,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    //DOES A USER HAS MANY PROJECT:YES
+    //MEANS A USER CAN HAVE MAN PROJECT
     public function projects(){
         return $this->hasMany(Project::class,'owner_id' );
+    }
+
+    //MEANS A ROLE BELONGS TO A USER
+    public function role(){
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    //MEANS A USER CAN HAVE MULTIPLE ATTENDANCE
+    public function attendance(){
+        return $this->hasMany(Attendance::class);
     }
 }
