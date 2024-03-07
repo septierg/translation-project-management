@@ -28,33 +28,22 @@ class AuthController extends Controller
             return response()->json(['message'  => $validator->errors()->first()], 400);
         }
 
-        //create a unique token
-        $user_token = Str::random(60);
-
         //create user and add the token to it
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'api_token' =>  $user_token
+            'api_token' =>  Str::random(60)
         ]);
-
-        //create token and add to table
-        $user_token = Token::create([
-            'api_token' => $user_token
-        ]);
-
 
         //assign role BUT ROLES NEEDS TO BE CREATED IN BD BEFORE
         $employee_role = Role::where('name', 'employee')->first();
         $employee_role->user()->save($user);
 
-
         //return response
         $response = [
             'user' => $user,
-            'access_token' => $user->api_token,
-            'token' => $user_token->api_token
+            'access_token' => $user->api_token
         ];
 
         return response()->json($response, 201);
@@ -81,44 +70,49 @@ class AuthController extends Controller
         //attempt authentification
         if(Auth::attempt($credentials))
         {
-
             //get user object
-            $user = User::where('email', $request->input('email'))->first();
+            $user = User::where('email', $request->input('email'))->select('api_token')->first();
 
-            //TODO
-            //Create token and save it in a separate DB
-            //Get that token and check with the one with the user token
-            //https://stackoverflow.com/questions/23247873/laravel-authenticating-with-session-token
-            $token = Str::random(60);
+            if($user){
 
-            //return response
-            $response = [
-                'data' => [
-                    'access_token' => $token
-                ]
-            ];
+                //create token for current user
+                $user_token = Token::create([
+                    'api_token' => $user['api_token']
+                ]);
+                //return response
+                $response = [
+                    'data' => [
+                        'access_token' => $user->api_token,
+                        'token' => $user_token->api_token
+                    ]
+                ];
 
-            return response()->json($response);
+                return response()->json($response);
+
+            } else //return response
+                return response()->json(['message'  => 'Unauthenticated'], 401);
 
 
-        }
-        else{
-            //return response
+        }else //return response
             return response()->json(['message'  => 'Unauthenticated'], 401);
-        }
-
 
     }
 
-    // need to be change for laravel 5.7
     public function logout(Request $request)
     {
-        //$request->user()->delete();
-        //$request->user()->tokens()->delete();
-        dd( $this->middleware('guest'));
-       dd(Auth::guard('web')->logout());
+        //get token object
+        $token = Token::where('api_token', $request->bearerToken())->first();
+        $token->delete();
 
-        return response()->json(null, 204);
+        //return response
+        $response = [
+            'data' => [
+                'message' =>'Logout successfully'
+            ]
+        ];
+
+        return response()->json($response, 200);
+
     }
 
     public function resetPassword(Request $request)
@@ -132,6 +126,7 @@ class AuthController extends Controller
             return response()->json(['message'  => $validator->errors()->first()], 400);
         }
 
+        //TODO CONTINUE ON THAT RESET PASSWORD METHOD
 
         //get user object
         $user = $request->user();
