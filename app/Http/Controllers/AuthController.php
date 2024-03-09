@@ -119,36 +119,35 @@ class AuthController extends Controller
     {
         //validation
         $validator = Validator::make($request->all(), [
+            'email' => 'required', 'string', 'email', 'max:255', 'unique:users',
             'password' => 'required', 'string', 'min:6', 'confirmed',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['message'  => $validator->errors()->first()], 400);
         }
-
-        //TODO CONTINUE ON THAT RESET PASSWORD METHOD
-
+dd($request->user());
         //get user object
-        $user = $request->user();
+        $user = User::where('email', $request->input('email'))->first();
 
         //change password
-        $user->password =  Hash::make($request->input('password'));
+        $user->password = Hash::make($request->input('password'));
 
         //update user
         $user->save();
 
-        //need to be change for laravel 5.7
-        $user->tokens()->delete();
+        //get and delete token
+        $token = Token::where('api_token', $request->bearerToken())->first();
+        $token->delete();
 
         //return response
-         $response = [
+        $response = [
             'data' => [
                 'message' =>'Password change successfully'
             ]
         ];
 
         return response()->json($response, 200);
-
 
     }
 
