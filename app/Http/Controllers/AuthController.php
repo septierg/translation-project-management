@@ -32,8 +32,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'api_token' =>  Str::random(60)
+            'password' => Hash::make($request->input('password'))
         ]);
 
         //assign role BUT ROLES NEEDS TO BE CREATED IN BD BEFORE
@@ -42,8 +41,7 @@ class AuthController extends Controller
 
         //return response
         $response = [
-            'user' => $user,
-            'access_token' => $user->api_token
+            'user' => $user
         ];
 
         return response()->json($response, 201);
@@ -71,19 +69,24 @@ class AuthController extends Controller
         if(Auth::attempt($credentials))
         {
             //get user object
-            $user = User::where('email', $request->input('email'))->select('api_token')->first();
+            $user = User::where('email', $request->input('email'))->first();
 
             if($user){
+                $token = Str::random(60);
+
+                $user->api_token = $token;
+                $user->save();
 
                 //create token for current user
                 $user_token = Token::create([
-                    'api_token' => $user['api_token']
+                    'api_token' => $token
                 ]);
+
                 //return response
                 $response = [
                     'data' => [
                         'access_token' => $user->api_token,
-                        'token' => $user_token->api_token
+                        'token' => $token
                     ]
                 ];
 

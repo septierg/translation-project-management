@@ -27,6 +27,11 @@ Route::get('/users', 'UserController@index');
 Route::get('/users/{id}', 'UserController@show');
 Route::put('/users/{id}', 'UserController@update');
 Route::delete('/users/{id}', 'UserController@destroy');
+
+Route::post('/attendance/clock-in', 'AttendanceController@clock_in');
+Route::post('/attendance/clock-out', 'AttendanceController@clock_out');
+Route::get('/attendance/reports/{id}', 'AttendanceController@reports');
+Route::get('/attendance/reports', 'AttendanceController@all_reports');
 /*Route::resources([
         '/users' => 'PhotoController',
         'posts' => 'PostController'
