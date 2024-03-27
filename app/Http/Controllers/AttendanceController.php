@@ -7,20 +7,13 @@ use App\Attendance;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
     public function clock_in(Request $request){
 
         $dt = Carbon::now();
-
-        //dd(Carbon::today());
-
-       /* echo $dt->toDateString();                          // 1975-12-25
-        echo $dt->toFormattedDateString();                 // Dec 25, 1975
-        echo $dt->toTimeString();                          // 14:15:16
-        echo $dt->toDateTimeString();                      // 1975-12-25 14:15:16
-        echo $dt->toDayDateTimeString();*/
 
         //user id
         $user_id = $request->input('user_id');
@@ -82,6 +75,10 @@ class AttendanceController extends Controller
             'end' => 'required', 'date',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['message'  => $validator->errors()->first()], 400);
+        }
+
         //get attendances
         $attendances = Attendance::where('user_id', $id)
         ->whereBetween('date', [
@@ -90,8 +87,6 @@ class AttendanceController extends Controller
         ])
         ->orderBy('date', 'asc')
         ->get();
-
-        //by user id and date range
 
         //return response
         return response()->json($attendances, 200);
@@ -105,38 +100,22 @@ class AttendanceController extends Controller
             'end' => 'required', 'date',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['message'  => $validator->errors()->first()], 400);
+        }
+
         $start =  $request->input('start');
         $end =  $request->input('end');
 
-        //TODO
-        //find a way to do a query with date between laravel 5.7
-
-        //get all users together with the attendance laravel 9 version
-       /* $users = User::with(['attendance' => function ($query) use ($start, $end){
-
-            $query
+        //Maybe another way to ask the relationship in collection
+        $users = DB::table('users')
+            ->join('attendances', 'users.id', '=', 'attendances.user_id')
             ->whereBetween('date', [
                 $start,
                 $end
-
             ])
             ->orderBy('date', 'asc')
             ->get();
-        }]);*/
-        //dd($start,$end);
-
-        $users = User::with('attendance')->get();
-        /*$users = User::whereHas('attendance', function($q){
-            $q->where('date', '>=', '2024-02-01');
-        })->get();*/
-
-//$users = User::with('attendance')
-        /*->whereBetween('attendance.date', [
-            $request->input('start'),
-            $request->input('end')
-        ])
-        ->orderBy('date', 'asc')*/
-        //->get();
 
         //return response
         return response()->json($users, 200);
