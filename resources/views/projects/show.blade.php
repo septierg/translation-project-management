@@ -1,69 +1,83 @@
 @extends('layouts.admin')
 
-
-
 @section('title')
     Projects
-@endsection()
-
+@endsection
 
 @section('content')
-    <h1> {{ $project->title }}</h1>
 
+<div class="container py-4">
 
-    <div class="container">
-        {{ $project->description }}
-
-        <p>
-            <a href="/projects/{{ $project->id }}/edit">Edit</a>
-        </p>
-
+    {{-- Titre du projet --}}
+    <div class="mb-4">
+        <h1 class="mb-1">{{ $project->title }}</h1>
+        <p class="text-muted">{{ $project->description }}</p>
+        <a href="/projects/{{ $project->id }}/edit" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-pencil"></i> Modifier le projet
+        </a>
     </div>
 
+    {{-- Liste des tâches --}}
     @if($project->tasks->count())
-        <div class="container">
-            @foreach($project->tasks as $task)
-
-                    <form method="POST" action="/tasks/{{ $task->id }}">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light fw-bold">
+                Tâches
+            </div>
+            <div class="card-body">
+                @foreach($project->tasks as $task)
+                    <form method="POST" action="/tasks/{{ $task->id }}" class="mb-3">
                         @method('PATCH')
                         @csrf
 
                         <div class="form-check">
-                            <label class="form-check-label {{ $task->completed ? 'is-complete' : '' }}"  for="completed" >
-
-                                <input class="form-check-input" type="checkbox" value="" name="completed" id="completed" onChange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="completed"
+                                id="task-{{ $task->id }}"
+                                onchange="this.form.submit()"
+                                {{ $task->completed ? 'checked' : '' }}
+                            >
+                            <label class="form-check-label {{ $task->completed ? 'text-decoration-line-through text-muted' : '' }}"
+                                for="task-{{ $task->id }}">
                                 {{ $task->body }}
                             </label>
-
                         </div>
                     </form>
-
-
-            @endforeach
-
+                @endforeach
+            </div>
         </div>
     @endif
 
-    <div class="container" style="padding-top:15px">
+    {{-- Formulaire d'ajout de tâche --}}
+    <div class="card shadow-sm">
+        <div class="card-header bg-light fw-bold">
+            Ajouter une nouvelle tâche
+        </div>
+        <div class="card-body">
             <form method="POST" action="/projects/{{ $project->id }}/tasks">
                 @csrf
-                <div class="form-group">
-                    <label class="form-check-label"  for="body" >
 
-                        <input type="text" value="" name="body" id="body" placeholder="New task" required>
-
-                    </label>
-
+                <div class="mb-3">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="body"
+                        id="body"
+                        placeholder="Saisissez une nouvelle tâche"
+                        required
+                    >
                 </div>
 
-                <div class="form-group">
-                    <button  type="submit" class="btn btn-primary">Create Task</button>
-                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Créer la tâche
+                </button>
 
                 @include('errors')
-
             </form>
+        </div>
     </div>
 
+</div>
 
 @endsection

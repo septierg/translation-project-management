@@ -41,6 +41,9 @@ class ProjectsController extends Controller
             new ProjectCreated($project)
         );*/
         session()->flash('message', 'Your project has been created.');
+
+        //return ['message' => 'Project created!'];
+
         return redirect('/projects');
     }
 

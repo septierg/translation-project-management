@@ -5,6 +5,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+const { default: Axios } = require('axios');
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -29,5 +31,31 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
+    data(){
+        return{
+            title: '',
+            description:'',
+        }
+
+    },
+
+    methods:{
+
+        onSubmit(){
+            alert('submitting');
+            Axios.post('/projects', {
+                title:this.title,
+                description:this.description
+            })
+
+        }
+
+    },
+
+    mounted() {
+            console.log('Component app.js mounted.')
+    }
+
 });

@@ -1,75 +1,78 @@
 @extends('layouts.admin')
 
-
-
 @section('title')
-    Projects
-@endsection()
-
+    Éditer le projet
+@endsection
 
 @section('content')
 
-    <div class="container">
-        <h1>Edit Project</h1>
-        <div class="row">
-            <div class="col">
-                <form method="POST" action="/projects/{{ $project->id }}">
-                    {{ method_field('PATCH') }}
-                    @csrf
+<div class="container py-4">
 
-                    <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" placeholder="Project title" value="{{ $project->title }}" required>
+    <h1 class="mb-4">Modifier le projet</h1>
+
+    {{-- Formulaire d'édition --}}
+    <form method="POST" action="/projects/{{ $project->id }}">
+        @method('PATCH')
+        @csrf
+
+        <div class="row g-4">
+
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light fw-bold">Français</div>
+                    <div class="card-body">
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Titre</label>
+                            <input
+                                type="text"
+                                name="title"
+                                id="title"
+                                class="form-control @error('title') is-invalid @enderror"
+                                placeholder="Titre du projet"
+                                value="{{ old('title', $project->title) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea
+                                name="description"
+                                id="description"
+                                class="form-control @error('description') is-invalid @enderror"
+                                placeholder="Description du projet"
+                                rows="5"
+                                required
+                            >{{ old('description', $project->description) }}</textarea>
+
+                        </div>
 
                     </div>
-
-                    <div class="form-group">
-                        <textarea  class="form-control" name="description" placeholder="Project description" required>{{ $project->description }}</textarea>
-
-                    </div>
-
-
-                    <div class="form-group">
-                        <button  type="submit" class="btn btn-primary">Update project</button>
-                    </div>
-
+                </div>
             </div>
-            <div class="col">
 
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" name="title_en" placeholder="Project title" value="{{ $project->title }}" required>
-
-                </div>
-
-                <div class="form-group">
-                    <textarea  class="form-control" name="description-en" placeholder="Project description" required>{{ $project->description }}</textarea>
-
-                </div>
-
-
-
-
-
-                </form>
-            </div>
         </div>
-        <div class="row">
-            <form method="POST" action="/projects/{{ $project->id }}">
-                {{ method_field('DELETE') }}
-                @csrf
 
-                <div class="form-group">
-                    <button  type="submit" class="btn btn-danger">Delete project</button>
-                </div>
-
-            </form>
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Mettre à jour le projet
+            </button>
         </div>
-    </div>
+    </form>
 
-
-
-
+    {{-- Formulaire suppression --}}
+    <form method="POST" action="/projects/{{ $project->id }}" class="mt-4">
+        @method('DELETE')
+        @csrf
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ce projet ?')">
+            <i class="bi bi-trash"></i> Supprimer le projet
+        </button>
+    </form>
 
     @include('errors')
+
+</div>
+
 @endsection

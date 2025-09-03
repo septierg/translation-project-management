@@ -9,7 +9,6 @@ use App\Token;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
 use Session;
 
 
@@ -66,7 +65,7 @@ class AuthController extends Controller
         );
 
         //attempt authentification
-        if(Auth::attempt($credentials))
+        if($credentials)
         {
             //get user object
             $user = User::where('email', $request->input('email'))->first();
@@ -105,6 +104,8 @@ class AuthController extends Controller
     {
         //get token object
         $token = Token::where('api_token', $request->bearerToken())->first();
+
+        dump($token, $request->bearerToken());
         $token->delete();
 
         //return response
