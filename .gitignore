@@ -1,11 +1,37 @@
-/node_modules
+# Node modules
+/node_modules/
+
+# Laravel specific
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
+/vendor/
 .env
 .phpunit.result.cache
-Homestead.json
-Homestead.yaml
+
+# Laravel Mix output
+/public/js/
+/public/css/
+/public/mix-manifest.json
+
+# Composer
+composer.lock
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NPM/Yarn logs
 npm-debug.log
 yarn-error.log
+pnpm-debug.log
+
+# Sail container files
+docker-compose.override.yml
+.env.sail

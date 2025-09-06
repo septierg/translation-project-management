@@ -32,21 +32,5 @@ Route::post('/attendance/clock-in', 'AttendanceController@clock_in');
 Route::post('/attendance/clock-out', 'AttendanceController@clock_out');
 Route::get('/attendance/reports/{id}', 'AttendanceController@reports');
 Route::get('/attendance/reports', 'AttendanceController@all_reports');
-/*Route::resources([
-        '/users' => 'PhotoController',
-        'posts' => 'PostController'
-]);
-Route::controller('UsersController')->group(function(){
-    Route::get('/users', 'index');
 
-});
-
- public function index(){
-        $users = User::all();
-
-        return response()->json(['data' => $users], 200);
-
-    }
-
-*/
 

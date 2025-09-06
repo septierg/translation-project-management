@@ -198,32 +198,6 @@
             </ul>
         </li><!-- End Components Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav-user" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-menu-button-wide"></i><span>User</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="components-nav-user" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-
-                <li class="nav-item">
-                    <a class="nav-link " href="/api/users">
-                        <i class="bi bi-grid"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-                <!-- End Dashboard Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link " href="/api/users">
-                        <i class="bi bi-grid"></i>
-                        <span>Create user</span>
-                    </a>
-                </li>
-                <!-- End Dashboard Nav -->
-
-            </ul>
-        </li><!-- End Components Nav -->
-
-
         @endif
 
 
